@@ -30,5 +30,49 @@ namespace MiPrimerApi.Controllers
         {
             return Ok(articulos);
         }
+
+        [HttpGet]
+        [Route("{id}")]
+        public IActionResult ObtenerPorId(int id)
+        {
+            var articulo = articulos.FirstOrDefault (a=> a.Id ==id);
+            if (articulos == null)
+            {
+                return NotFound();
+            }
+            return Ok(articulo);
+        }
+
+        [HttpPost]
+        [Route("")]
+        public IActionResult Registrar(Articulo articulo)
+        {
+            articulo.FechaRegistro = DateTime.Now;
+            articulos.Add(articulo);
+            //return CreatedAtAction(nameof(ObtenerPorId), new {articulo.Id}, articulo);
+            return Ok(articulos);
+        }
+
+        [HttpPut]
+        [Route("{id}")]
+        public IActionResult Editar(int id, Articulo articulo)
+        {
+            var articuloOriginal = articulos.FirstOrDefault(a => a.Id == id);
+            articulo.Id = id;
+            var indice = articulos.IndexOf(articuloOriginal);
+            articulos[indice].Nombre = articulo.Nombre;
+            articulos[indice].Descripcion = articulo.Descripcion;
+            articulos[indice].Precio = articulo.Precio;
+            return Ok(articulos);
+        }
+
+        [HttpDelete]
+        [Route("{Id}")]
+        public IActionResult Borrar(int id)
+        {
+            var articulo = articulos.FirstOrDefault(a => a.Id == id);
+            articulos.Remove(articulo);
+            return Ok(articulos);
+        }
     }
 }
