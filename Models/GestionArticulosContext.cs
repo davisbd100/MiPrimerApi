@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace MiPrimerApi.Models
 {
-    public class GestionarArticulosContext: DbContext
+    public class GestionArticulosContext: DbContext
     {
-        public GestionarArticulosContext(DbContextOptions<GestionarArticulosContext> opciones) : base(opciones)
+        public GestionArticulosContext(DbContextOptions<GestionArticulosContext> opciones) : base(opciones)
         {
 
         }
