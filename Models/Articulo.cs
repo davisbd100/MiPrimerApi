@@ -13,5 +13,7 @@ namespace MiPrimerApi.Models{
         public string Descripcion { set; get; }
         public double Precio { set; get; }
         public DateTime FechaRegistro { set; get; }
+        public int ProveedorId { get; set; }
+        public virtual Proveedor Proveedor { get; set; }
     }
 }
