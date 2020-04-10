@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MiPrimerApi.Models;
 using Microsoft.EntityFrameworkCore;
+using MiPrimerApi.Repositories;
 
 namespace MiPrimerApi.Controllers
 {
@@ -14,26 +15,50 @@ namespace MiPrimerApi.Controllers
     public class ArticuloController : ControllerBase
     {
         List<Articulo> articulos { set; get; }
-
+        private readonly IArticuloRepository _repoArticulo;
         private readonly GestionArticulosContext _contexto;
-        public ArticuloController(GestionArticulosContext contexto)
+        // public ArticuloController(GestionArticulosContext contexto)
+        // {
+        //     _contexto = contexto;
+        // }
+        public ArticuloController(IArticuloRepository repoArticulo)
         {
-            _contexto = contexto;
+            _repoArticulo = repoArticulo;
         }
+
+        // [HttpGet]
+        // [Route("")]
+        // public IActionResult Obtener()
+        // {
+        //     var articulos = _contexto.Articulos.ToList();
+        //     return Ok(articulos);
+        // }
 
         [HttpGet]
         [Route("")]
         public IActionResult Obtener()
         {
-            var articulos = _contexto.Articulos.ToList();
+            var articulos = _repoArticulo.ObtenerTodos();
             return Ok(articulos);
         }
+
+        // [HttpGet]
+        // [Route("{id}")]
+        // public IActionResult ObtenerPorId(int id)
+        // {
+        //     var articulo = _contexto.Articulos.FirstOrDefault (a=> a.Id == id);
+        //     if (articulo == null)
+        //     {
+        //         return NotFound();
+        //     }
+        //     return Ok(articulo);
+        // }
 
         [HttpGet]
         [Route("{id}")]
         public IActionResult ObtenerPorId(int id)
         {
-            var articulo = _contexto.Articulos.FirstOrDefault (a=> a.Id == id);
+            var articulo = _repoArticulo.ObtenerPorId(id);
             if (articulo == null)
             {
                 return NotFound();

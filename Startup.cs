@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
 using MiPrimerApi.Models;
+using MiPrimerApi.Repositories;
 
 namespace MiPrimerApi
 {
@@ -28,6 +29,7 @@ namespace MiPrimerApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContextPool<GestionArticulosContext>(options => options.UseLazyLoadingProxies().UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddScoped<IArticuloRepository, ArticuloRepository>();
             services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore);
         }
 
