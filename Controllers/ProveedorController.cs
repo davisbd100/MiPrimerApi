@@ -33,7 +33,7 @@ namespace MiPrimerApi.Controllers
         public IActionResult ObtenerPorId(int id)
         {
             var proveedor = _contexto.Proveedores.FirstOrDefault (a=> a.Id ==id);
-            if (proveedores == null)
+            if (proveedor == null)
             {
                 return NotFound();
             }
@@ -58,7 +58,7 @@ namespace MiPrimerApi.Controllers
             proveedorOriginal.Nombre = proveedor.Nombre;
             proveedorOriginal.Telefono = proveedor.Telefono;
             _contexto.SaveChanges();
-            return Ok(proveedores);
+            return Ok(_contexto.Proveedores);
         }
 
         [HttpDelete]
@@ -68,7 +68,7 @@ namespace MiPrimerApi.Controllers
             var proveedor = _contexto.Proveedores.FirstOrDefault(a => a.Id == id);
             _contexto.Remove(proveedor);
             _contexto.SaveChanges();
-            return Ok(proveedores);
+            return Ok(_contexto.Proveedores);
         }
     }
 }

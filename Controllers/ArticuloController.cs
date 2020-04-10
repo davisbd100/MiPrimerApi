@@ -33,8 +33,8 @@ namespace MiPrimerApi.Controllers
         [Route("{id}")]
         public IActionResult ObtenerPorId(int id)
         {
-            var articulo = _contexto.Articulos.FirstOrDefault (a=> a.Id ==id);
-            if (articulos == null)
+            var articulo = _contexto.Articulos.FirstOrDefault (a=> a.Id == id);
+            if (articulo == null)
             {
                 return NotFound();
             }
@@ -60,7 +60,7 @@ namespace MiPrimerApi.Controllers
             articuloOriginal.Descripcion = articulo.Descripcion;
             articuloOriginal.Precio = articulo.Precio;
             _contexto.SaveChanges();
-            return Ok(articulos);
+            return Ok(_contexto.Articulos);
         }
 
         [HttpDelete]
@@ -70,7 +70,7 @@ namespace MiPrimerApi.Controllers
             var articulo = _contexto.Articulos.FirstOrDefault(a => a.Id == id);
             _contexto.Remove(articulo);
             _contexto.SaveChanges();
-            return Ok(articulos);
+            return Ok(_contexto.Articulos);
         }
     }
 }
