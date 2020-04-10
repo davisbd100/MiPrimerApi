@@ -14,8 +14,8 @@ namespace MiPrimerApi.Controllers
     {
         List<Proveedor> proveedores { set; get; }
 
-        private readonly GestionProveedoresContext _contexto;
-        public ProveedorController(GestionProveedoresContext contexto)
+        private readonly GestionArticulosContext _contexto;
+        public ProveedorController(GestionArticulosContext contexto)
         {
             _contexto = contexto;
         }

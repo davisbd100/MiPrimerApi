@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.EntityFrameworkCore;
+using MiPrimerApi.Models;
 
 namespace MiPrimerApi
 {
@@ -26,7 +27,7 @@ namespace MiPrimerApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContextPool<MiPrimerApi.Models.GestionArticulosContext>(options => options.UseLazyLoadingProxies().UseMySql(Configuration.GetConnectionString("DefaultConnection")));
+            services.AddDbContextPool<GestionArticulosContext>(options => options.UseLazyLoadingProxies().UseMySql(Configuration.GetConnectionString("DefaultConnection")));
             services.AddControllers();
         }
 
