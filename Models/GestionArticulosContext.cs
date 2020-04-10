@@ -14,5 +14,6 @@ namespace MiPrimerApi.Models
         }
 
         public DbSet<Articulo> Articulos { set; get; }
+        public DbSet<Proveedor> Proveedores { set; get; }
     }
 }
