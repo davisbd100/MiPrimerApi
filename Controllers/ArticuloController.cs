@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using MiPrimerApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace MiPrimerApi.Controllers
 {
@@ -13,21 +14,18 @@ namespace MiPrimerApi.Controllers
     public class ArticuloController : ControllerBase
     {
         List<Articulo> articulos { set; get; }
-        public ArticuloController()
+
+        private readonly GestionArticulosContext _contexto;
+        public ArticuloController(GestionArticulosContext contexto)
         {
-            articulos = new List<Articulo>()
-            {
-                new Articulo { Id = 1, Nombre = "Laptop", Descripcion = "Laptop HP", Precio = 15000, FechaRegistro = DateTime.Now },
-                new Articulo { Id = 2, Nombre = "Impresora", Descripcion = "Impresora Epson", Precio = 8700, FechaRegistro = DateTime.Now },
-                new Articulo { Id = 3, Nombre = "Monito", Descripcion = "Monitor Asus", Precio = 1600, FechaRegistro = DateTime.Now },
-                new Articulo { Id = 4, Nombre = "Cable USB", Descripcion = "Cable USB generico", Precio = 193, FechaRegistro = DateTime.Now }
-            };
+            _contexto = contexto;
         }
 
         [HttpGet]
         [Route("")]
         public IActionResult Obtener()
         {
+            var articulos = _contexto.Articulos.ToList();
             return Ok(articulos);
         }
 
@@ -35,7 +33,7 @@ namespace MiPrimerApi.Controllers
         [Route("{id}")]
         public IActionResult ObtenerPorId(int id)
         {
-            var articulo = articulos.FirstOrDefault (a=> a.Id ==id);
+            var articulo = _contexto.Articulos.FirstOrDefault (a=> a.Id ==id);
             if (articulos == null)
             {
                 return NotFound();
@@ -48,21 +46,20 @@ namespace MiPrimerApi.Controllers
         public IActionResult Registrar(Articulo articulo)
         {
             articulo.FechaRegistro = DateTime.Now;
-            articulos.Add(articulo);
-            //return CreatedAtAction(nameof(ObtenerPorId), new {articulo.Id}, articulo);
-            return Ok(articulos);
+            _contexto.Articulos.Add(articulo);
+            _contexto.SaveChanges();
+            return CreatedAtAction(nameof(ObtenerPorId), new{articulo.Id}, articulo);
         }
 
         [HttpPut]
         [Route("{id}")]
         public IActionResult Editar(int id, Articulo articulo)
         {
-            var articuloOriginal = articulos.FirstOrDefault(a => a.Id == id);
-            articulo.Id = id;
-            var indice = articulos.IndexOf(articuloOriginal);
-            articulos[indice].Nombre = articulo.Nombre;
-            articulos[indice].Descripcion = articulo.Descripcion;
-            articulos[indice].Precio = articulo.Precio;
+            var articuloOriginal = _contexto.Articulos.FirstOrDefault(a => a.Id == id);
+            articuloOriginal.Nombre = articulo.Nombre;
+            articuloOriginal.Descripcion = articulo.Descripcion;
+            articuloOriginal.Precio = articulo.Precio;
+            _contexto.SaveChanges();
             return Ok(articulos);
         }
 
