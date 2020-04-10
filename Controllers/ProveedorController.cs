@@ -13,19 +13,18 @@ namespace MiPrimerApi.Controllers
     public class ProveedorController : ControllerBase
     {
         List<Proveedor> proveedores { set; get; }
-        public ProveedorController()
+
+        private readonly GestionProveedoresContext _contexto;
+        public ProveedorController(GestionProveedoresContext contexto)
         {
-            proveedores = new List<Proveedor>()
-            {
-                new Proveedor { Id = 1, Nombre = "Acer", Telefono = "2281270021", FechaRegistro = DateTime.Now },
-                new Proveedor { Id = 2, Nombre = "Lenovo", Telefono = "2288183991", FechaRegistro = DateTime.Now }
-            };
+            _contexto = contexto;
         }
 
         [HttpGet]
         [Route("")]
         public IActionResult Obtener()
         {
+            var proveedores = _contexto.Proveedores.ToList();
             return Ok(proveedores);
         }
 
@@ -33,7 +32,7 @@ namespace MiPrimerApi.Controllers
         [Route("{id}")]
         public IActionResult ObtenerPorId(int id)
         {
-            var proveedor = proveedores.FirstOrDefault (a=> a.Id ==id);
+            var proveedor = _contexto.Proveedores.FirstOrDefault (a=> a.Id ==id);
             if (proveedores == null)
             {
                 return NotFound();
@@ -46,20 +45,19 @@ namespace MiPrimerApi.Controllers
         public IActionResult Registrar(Proveedor proveedor)
         {
             proveedor.FechaRegistro = DateTime.Now;
-            proveedores.Add(proveedor);
-            //return CreatedAtAction(nameof(ObtenerPorId), new {proveedor.Id}, proveedor);
-            return Ok(proveedores);
+            _contexto.Proveedores.Add(proveedor);
+            _contexto.SaveChanges();
+            return CreatedAtAction(nameof(ObtenerPorId), new{proveedor.Id}, proveedor);
         }
 
         [HttpPut]
         [Route("{id}")]
         public IActionResult Editar(int id, Proveedor proveedor)
         {
-            var proveedorOriginal = proveedores.FirstOrDefault(a => a.Id == id);
-            proveedor.Id = id;
-            var indice = proveedores.IndexOf(proveedorOriginal);
-            proveedores[indice].Nombre = proveedor.Nombre;
-            proveedores[indice].Telefono = proveedor.Telefono;
+            var proveedorOriginal = _contexto.Proveedores.FirstOrDefault(a => a.Id == id);
+            proveedorOriginal.Nombre = proveedor.Nombre;
+            proveedorOriginal.Telefono = proveedor.Telefono;
+            _contexto.SaveChanges();
             return Ok(proveedores);
         }
 
@@ -67,8 +65,9 @@ namespace MiPrimerApi.Controllers
         [Route("{Id}")]
         public IActionResult Borrar(int id)
         {
-            var proveedor = proveedores.FirstOrDefault(a => a.Id == id);
-            proveedores.Remove(proveedor);
+            var proveedor = _contexto.Proveedores.FirstOrDefault(a => a.Id == id);
+            _contexto.Remove(proveedor);
+            _contexto.SaveChanges();
             return Ok(proveedores);
         }
     }
