@@ -12,5 +12,7 @@ namespace MiPrimerApi.Models
         public String Nombre { get; set; }
         public String Telefono { get; set; }
         public DateTime FechaRegistro { get; set; }
+
+        public virtual ICollection<Articulo> Articulos { get; set; }
     }
 }
