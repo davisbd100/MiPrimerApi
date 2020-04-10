@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace MiPrimerApi.Repositories
 {
+
     public interface IArticuloRepository
     {
         List<Articulo> ObtenerTodos();
