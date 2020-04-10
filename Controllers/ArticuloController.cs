@@ -67,8 +67,9 @@ namespace MiPrimerApi.Controllers
         [Route("{Id}")]
         public IActionResult Borrar(int id)
         {
-            var articulo = articulos.FirstOrDefault(a => a.Id == id);
-            articulos.Remove(articulo);
+            var articulo = _contexto.Articulos.FirstOrDefault(a => a.Id == id);
+            _contexto.Remove(articulo);
+            _contexto.SaveChanges();
             return Ok(articulos);
         }
     }
